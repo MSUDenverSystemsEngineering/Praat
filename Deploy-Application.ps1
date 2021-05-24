@@ -22,13 +22,13 @@
 .PARAMETER DisableLogging
 	Disables logging to file for the script. Default is: $false.
 .EXAMPLE
-	powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeployMode 'Silent'; Exit $LastExitCode }"
+    powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeployMode 'Silent'; Exit $LastExitCode }"
 .EXAMPLE
     powershell.exe -Command "& { & '.\Deploy-Application.ps1' -AllowRebootPassThru; Exit $LastExitCode }"
 .EXAMPLE
-	powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeploymentType 'Uninstall'; Exit $LastExitCode }"
+    powershell.exe -Command "& { & '.\Deploy-Application.ps1' -DeploymentType 'Uninstall'; Exit $LastExitCode }"
 .EXAMPLE
-	Deploy-Application.exe -DeploymentType "Install" -DeployMode "Silent"
+    Deploy-Application.exe -DeploymentType "Install" -DeployMode "Silent"
 .NOTES
 	Toolkit Exit Code Ranges:
 	60000 - 68999: Reserved for built-in exit codes in Deploy-Application.ps1, Deploy-Application.exe, and AppDeployToolkitMain.ps1
@@ -68,11 +68,11 @@ Try {
 	[string]$appVendor = ''
 	[string]$appName = 'Praat'
 	[string]$appVersion = '6.1.47'
-	[string]$appArch = ''
+	[string]$appArch = 'x64'
 	[string]$appLang = 'EN'
 	[string]$appRevision = '01'
 	[string]$appScriptVersion = '1.0.0'
-	[string]$appScriptDate = '05/17/2021'
+	[string]$appScriptDate = '05/24/2021'
 	[string]$appScriptAuthor = '<David Torres>'
 	##*===============================================
 	## Variables: Install Titles (Only set here to override defaults set by the toolkit)
@@ -143,7 +143,8 @@ Try {
 		## <Perform Installation tasks here>
 		$exitCode = Copy-File -Path "$dirFiles\Praat" -Destination "$envProgramFilesx86\" -Recurse
 		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
-		
+
+
 
 		##*===============================================
 		##* POST-INSTALLATION
@@ -152,7 +153,6 @@ Try {
 
 		## <Perform Post-Installation tasks here>
 		Copy-File -Path "$dirSupportFiles\Praat.lnk" -Destination "$envCommonDesktop\"
-
 
 		## Display a message at the end of the install
 		If (-not $useDefaultMsi) {}
@@ -185,9 +185,6 @@ Try {
 		}
 
 		# <Perform Uninstallation tasks here>
-		Remove-File -Path "$envCommonDesktop\Praat.lnk"
-		Remove-File -Path "$envProgramFilesx86\Praat\" -Recurse
-		
 
 
 		##*===============================================
@@ -196,6 +193,8 @@ Try {
 		[string]$installPhase = 'Post-Uninstallation'
 
 		## <Perform Post-Uninstallation tasks here>
+		Remove-File -Path "$envCommonDesktop\Praat.lnk"
+		Remove-File -Path "$envProgramFilesx86\Praat\" -Recurse
 
 
 	}
@@ -231,7 +230,7 @@ Try {
 		## <Perform Post-Repair tasks here>
 
 
-	}
+    }
 	##*===============================================
 	##* END SCRIPT BODY
 	##*===============================================
@@ -250,8 +249,8 @@ Catch {
 # SIG # Begin signature block
 # MIIT7gYJKoZIhvcNAQcCoIIT3zCCE9sCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU1+qEnlG215YFLtG47ogQbgmq
-# mzqgghEmMIIFgTCCBGmgAwIBAgIQOXJEOvkit1HX02wQ3TE1lTANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUBYcZA98Xzx4DjvlQcXr1aa0N
+# TxugghEmMIIFgTCCBGmgAwIBAgIQOXJEOvkit1HX02wQ3TE1lTANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTE5MDMxMjAwMDAw
@@ -348,11 +347,11 @@ Catch {
 # bW1vbiBSU0EgQ29kZSBTaWduaW5nIENBAhAHA3HRD3laQHGZK5QHYpviMAkGBSsO
 # AwIaBQCgeDAYBgorBgEEAYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEM
 # BgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMCMGCSqG
-# SIb3DQEJBDEWBBQfOEm3E6L3SxJJBLT9y/NtFxVumjANBgkqhkiG9w0BAQEFAASC
-# AQBd7SdK6lrNcDMqZueqZTmxyNnkNxAATtq1uT/nsbD7d5OZsFTgtcgyhd7Zvr9Q
-# yjnZ2L9+i2BAAiAC6zeAka0ZlXcAWr8EononBuOm2IEH7/lSU4EvsOMZlLaL8TcH
-# 3zMNn9k0l8C47VAijKCoCk8zL/aU1imGj14oS9XmiN/vbLKw9Fuuc1EABi95UBB8
-# eqMaUOJgvGkTTNl92gSQmdU3XWqEJfTCaTGahvXGH+iyeX3/A/nAUqKpG2xDrGJd
-# pXHL1BYHIKT0Od/mZFtbMlMmP7eO02IKqkv8iDbo3wkVGVGZJG3wGr+kyegCk7G5
-# C6pi4vCeEzXBky2Z4/KrX5He
+# SIb3DQEJBDEWBBSU2TP9bqpBiWMVNFZFf2htoIiwGDANBgkqhkiG9w0BAQEFAASC
+# AQAXUbqLUq6J3qrv3ZK8/Ti6Bnk8skHxBjjb9+tMv+7NhhrFfLIzBS5qpprnKSJk
+# UiCR0WdliKapxLdfZsVLiITrszuYPD8AQ3AtvcaJqtr3beLHr9nu2ciDROhZew2t
+# gwpGvQ/bKXvdgSHCXvizhj0ssrVbK+ZGQQC27aDbuVwrJjXKVUS9XqpKonj8rn5W
+# /3dC/HDmTyfsKpnQfFNhQ3FToebywNJ1Ka66NyxGOyEjde8hGZlTliTjB2gf/Mxn
+# 6VaAOPEbCPk5WM3U2lNaI29bDSypv5X9zqDrTE/z99NnOw70/u8Sh0npjWSn3dhl
+# NQ/skeW+Wy8KCd8j7aC5q+kq
 # SIG # End signature block
